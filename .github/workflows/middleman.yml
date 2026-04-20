@@ -1,0 +1,20 @@
+name: Firebase Middleman Sync
+on:
+  repository_dispatch:
+    types: [publish_event]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Dependencies
+        run: npm install firebase-admin @octokit/rest
+      - name: Run Publisher
+        run: node publish.js
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
